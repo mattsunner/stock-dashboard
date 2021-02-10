@@ -5,6 +5,7 @@ Author: Matthew Sunner, 2021
 """
 
 import dash
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
@@ -37,26 +38,68 @@ app.layout = html.Div(children=[
         A Plotly Dash powered dashboard to view daily stock data.
     '''),
 
+    html.Div(["Stock Ticker Input: ",
+              dcc.Input(id='stock-text-box', value='AAPL', type='text')]),
+
     dcc.Graph(
         id='basic-plot',
-        figure=fig1
     ),
 
     dcc.Graph(
         id='candle-plot',
-        figure=fig2
     ),
 
     dcc.Graph(
         id='moving-avg',
-        figure=fig3
     ),
 
     dcc.Graph(
         id='matrix-view',
-        figure=fig4
     ),
 ])
+
+# Callbacks
+
+
+@app.callback(
+    Output(component_id='basic-plot', component_property='figure'),
+    Input(component_id='stock-text-box', component_property='value')
+)
+def update_figure1(selected_ticker):
+    fig = stock_price_dod(selected_ticker, start_date, end_date)
+
+    return fig
+
+
+@app.callback(
+    Output(component_id='candle-plot', component_property='figure'),
+    Input(component_id='stock-text-box', component_property='value')
+)
+def update_figure2(selected_ticker):
+    fig = stock_price_candle(selected_ticker, start_date, end_date)
+
+    return fig
+
+
+@app.callback(
+    Output(component_id='moving-avg', component_property='figure'),
+    Input(component_id='stock-text-box', component_property='value')
+)
+def update_figure3(selected_ticker):
+    fig = stock_price_ma(selected_ticker, ma_value, start_date, end_date)
+
+    return fig
+
+
+@app.callback(
+    Output(component_id='matrix-view', component_property='figure'),
+    Input(component_id='stock-text-box', component_property='value')
+)
+def update_figure4(selected_ticker):
+    fig = stock_price_matrix(selected_ticker, start_date, end_date)
+
+    return fig
+
 
 # App Server
 if __name__ == '__main__':
