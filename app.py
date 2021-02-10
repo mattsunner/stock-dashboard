@@ -18,18 +18,6 @@ from stock_visuals import stock_price_dod, stock_price_ma, stock_price_candle, s
 app = dash.Dash(__name__)
 
 
-# Stock Ticker Information
-start_date = datetime.datetime(2020, 1, 1)
-end_date = datetime.datetime.now()
-ticker = 'AAPL'
-ma_value = 30
-
-# Figures
-fig1 = stock_price_dod(ticker, start_date, end_date)
-fig2 = stock_price_candle(ticker, start_date, end_date)
-fig3 = stock_price_ma(ticker, ma_value, start_date, end_date)
-fig4 = stock_price_matrix(ticker, start_date, end_date)
-
 # Layout
 app.layout = html.Div(children=[
     html.H1(children='Stock Dashboard'),
@@ -40,6 +28,27 @@ app.layout = html.Div(children=[
 
     html.Div(["Stock Ticker Input: ",
               dcc.Input(id='stock-text-box', value='AAPL', type='text')]),
+
+    html.Div(["Moving Average Days: ",
+              dcc.Input(id='ma-days-box', value=30, type='number')]),
+
+    html.Div([
+        "Start Date Selection: ",
+        dcc.DatePickerSingle(
+            id='start-date-picker',
+            date='2020-01-01',
+            display_format='MMM Do, YY'
+        )
+    ]),
+
+    html.Div([
+        "End Date Selection: ",
+        dcc.DatePickerSingle(
+            id='end-date-picker',
+            date='2021-01-01',
+            display_format='MMM Do, YY'
+        )
+    ]),
 
     dcc.Graph(
         id='basic-plot',
@@ -63,40 +72,50 @@ app.layout = html.Div(children=[
 
 @app.callback(
     Output(component_id='basic-plot', component_property='figure'),
-    Input(component_id='stock-text-box', component_property='value')
+    Input(component_id='stock-text-box', component_property='value'),
+    Input(component_id='start-date-picker', component_property='date'),
+    Input(component_id='end-date-picker', component_property='date'),
 )
-def update_figure1(selected_ticker):
-    fig = stock_price_dod(selected_ticker, start_date, end_date)
+def update_figure1(selected_ticker, start_date_pick, end_date_pick):
+    fig = stock_price_dod(selected_ticker, start_date_pick, end_date_pick)
 
     return fig
 
 
 @app.callback(
     Output(component_id='candle-plot', component_property='figure'),
-    Input(component_id='stock-text-box', component_property='value')
+    Input(component_id='stock-text-box', component_property='value'),
+    Input(component_id='start-date-picker', component_property='date'),
+    Input(component_id='end-date-picker', component_property='date'),
 )
-def update_figure2(selected_ticker):
-    fig = stock_price_candle(selected_ticker, start_date, end_date)
+def update_figure2(selected_ticker, start_date_pick, end_date_pick):
+    fig = stock_price_candle(selected_ticker, start_date_pick, end_date_pick)
 
     return fig
 
 
 @app.callback(
     Output(component_id='moving-avg', component_property='figure'),
-    Input(component_id='stock-text-box', component_property='value')
+    Input(component_id='stock-text-box', component_property='value'),
+    Input(component_id='ma-days-box', component_property='value'),
+    Input(component_id='start-date-picker', component_property='date'),
+    Input(component_id='end-date-picker', component_property='date'),
 )
-def update_figure3(selected_ticker):
-    fig = stock_price_ma(selected_ticker, ma_value, start_date, end_date)
+def update_figure3(selected_ticker, ma_days, start_date_pick, end_date_pick):
+    fig = stock_price_ma(selected_ticker, ma_days,
+                         start_date_pick, end_date_pick)
 
     return fig
 
 
 @app.callback(
     Output(component_id='matrix-view', component_property='figure'),
-    Input(component_id='stock-text-box', component_property='value')
+    Input(component_id='stock-text-box', component_property='value'),
+    Input(component_id='start-date-picker', component_property='date'),
+    Input(component_id='end-date-picker', component_property='date'),
 )
-def update_figure4(selected_ticker):
-    fig = stock_price_matrix(selected_ticker, start_date, end_date)
+def update_figure4(selected_ticker, start_date_pick, end_date_pick):
+    fig = stock_price_matrix(selected_ticker, start_date_pick, end_date_pick)
 
     return fig
 
