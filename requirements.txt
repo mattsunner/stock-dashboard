@@ -82,7 +82,6 @@ retrying==1.3.3
 ruamel.yaml==0.16.12
 ruamel.yaml.clib==0.2.2
 six==1.15.0
-Stock-Visuals==1.0.0
 stringcase==1.2.0
 tabulate==0.8.7
 testpath==0.4.4
