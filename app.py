@@ -13,7 +13,7 @@ import pandas as pd
 
 import datetime
 
-from stock_visuals import stock_price_dod, stock_price_ma, stock_price_candle, stock_price_matrix
+from stock_visuals import Visuals
 
 app = dash.Dash(__name__)
 
@@ -77,7 +77,8 @@ app.layout = html.Div(children=[
     Input(component_id='end-date-picker', component_property='date'),
 )
 def update_figure1(selected_ticker, start_date_pick, end_date_pick):
-    fig = stock_price_dod(selected_ticker, start_date_pick, end_date_pick)
+    fig = Visuals.stock_price_dod(
+        selected_ticker, start_date_pick, end_date_pick)
 
     return fig
 
@@ -89,7 +90,8 @@ def update_figure1(selected_ticker, start_date_pick, end_date_pick):
     Input(component_id='end-date-picker', component_property='date'),
 )
 def update_figure2(selected_ticker, start_date_pick, end_date_pick):
-    fig = stock_price_candle(selected_ticker, start_date_pick, end_date_pick)
+    fig = Visuals.stock_price_candle(
+        selected_ticker, start_date_pick, end_date_pick)
 
     return fig
 
@@ -102,8 +104,8 @@ def update_figure2(selected_ticker, start_date_pick, end_date_pick):
     Input(component_id='end-date-picker', component_property='date'),
 )
 def update_figure3(selected_ticker, ma_days, start_date_pick, end_date_pick):
-    fig = stock_price_ma(selected_ticker, ma_days,
-                         start_date_pick, end_date_pick)
+    fig = Visuals.stock_price_ma(selected_ticker, ma_days,
+                                 start_date_pick, end_date_pick)
 
     return fig
 
@@ -115,7 +117,8 @@ def update_figure3(selected_ticker, ma_days, start_date_pick, end_date_pick):
     Input(component_id='end-date-picker', component_property='date'),
 )
 def update_figure4(selected_ticker, start_date_pick, end_date_pick):
-    fig = stock_price_matrix(selected_ticker, start_date_pick, end_date_pick)
+    fig = Visuals.stock_price_matrix(
+        selected_ticker, start_date_pick, end_date_pick)
 
     return fig
 
